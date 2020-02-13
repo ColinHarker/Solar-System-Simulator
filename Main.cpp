@@ -11,10 +11,10 @@ using namespace boost::multiprecision;
 constexpr auto width = 1920;
 constexpr auto height = 1080;
 
-
-cpp_dec_float_50 gConst = 6.67 * pow(10, -11);
-cpp_dec_float_50 AU = (149.6e6 * 1000);
-cpp_dec_float_50 SCALE = 250 / AU;
+constexpr cpp_dec_float_50 
+	gConst = 6.67 * pow(10, -11),
+	AU = (149.6e6 * 1000),
+	SCALE = 250 / AU;
 
 
 
@@ -22,15 +22,15 @@ cpp_dec_float_50 SCALE = 250 / AU;
 class Body {
 
 public:
-
-	cpp_dec_float_50 mass = 0.0;
 	float radius = 0.0;
-	cpp_dec_float_50 vx = 0.0;
-	cpp_dec_float_50 vy = 0.0;
-	cpp_dec_float_50 px = 0.0;
-	cpp_dec_float_50 py = 0.0;
-	cpp_dec_float_50 total_fx = 0.0;
-	cpp_dec_float_50 total_fy = 0.0;
+	cpp_dec_float_50
+		mass = 0.0,
+		vx = 0.0,
+		vy = 0.0,
+		px = 0.0,
+		py = 0.0,
+		total_fx = 0.0,
+		total_fy = 0.0;
 	int id = 0;
 
 	std::string name;
@@ -68,8 +68,10 @@ int main()
 	Body* pEarth = nullptr;
 	Body* pSun = nullptr;
 	Body* pVenus = nullptr;
+	Body* pMercury = nullptr;
 	Body* pMars = nullptr;
-
+	Body* pJupiter = nullptr;
+	Body* pSaturn = nullptr;
 
 	sf::Event event;
 
@@ -94,10 +96,19 @@ int main()
 	venus.name = "Venus";
 	venus.mass = 4.867 * pow(10, 24);
 	venus.px = 0.723 * AU;
-	venus.vy = -35.02 * 1000;
+	venus.vy = 35.02 * 1000;
 	venus.setup_appearance(5, 212, 93, 121);
 	pVenus = &venus;
 	addBody(pVenus);
+
+	Body mercury;
+	mercury.name = "Mercury";
+	mercury.mass = 3.285 * pow(10, 23);
+	mercury.px = 0.4 * AU;
+	mercury.vy = -48 * 1000;
+	mercury.setup_appearance(5, 212, 93, 121);
+	pMercury = &mercury;
+	addBody(pMercury);
 
 	Body mars;
 	mars.name = "Mars";
@@ -107,8 +118,24 @@ int main()
 	mars.setup_appearance(5, 195, 93, 121);
 	pMars = &mars;
 	addBody(pMars);
-	
 
+	Body jupiter;
+	jupiter.name = "Jupiter";
+	jupiter.mass = 1.898 * pow(10, 27);
+	jupiter.px = 5.2 * AU;
+	jupiter.vy = -13.1 * 1000;
+	jupiter.setup_appearance(15, 195, 93, 121);
+	pJupiter = &jupiter;
+	addBody(pJupiter);
+	
+	Body saturn;
+	saturn.name = "Saturn";
+	saturn.mass = 5.683 * pow(10, 26);
+	saturn.px = 9.6 * AU;
+	saturn.vy = -9.68 * 1000;
+	saturn.setup_appearance(15, 195, 93, 121);
+	pSaturn = &saturn;
+	addBody(pSaturn);
 
 	while (window.isOpen())
 	{
@@ -178,21 +205,38 @@ int main()
 			body->py += vy * timestep;
 		}
 		//std::cout << (sun.px * (SCALE)).convert_to<float>() << std::endl;
+		
 		sun.CircleBody.setPosition(width / 2, height / 2);
+		
 		earth.CircleBody.setPosition((earth.px * (SCALE)).convert_to<float>(), (earth.py * (SCALE)).convert_to<float>());
 		earth.CircleBody.move(width / 2, height / 2);
+		
 		venus.CircleBody.setPosition((venus.px * (SCALE)).convert_to<float>(), (venus.py * (SCALE)).convert_to<float>());
 		venus.CircleBody.move(width / 2, height / 2);
+		
+		mercury.CircleBody.setPosition((mercury.px * (SCALE)).convert_to<float>(), (mercury.py * (SCALE)).convert_to<float>());
+		mercury.CircleBody.move(width / 2, height / 2);
+		
 		mars.CircleBody.setPosition((mars.px * (SCALE)).convert_to<float>(), (mars.py * (SCALE)).convert_to<float>());
 		mars.CircleBody.move(width / 2, height / 2);
+		
+		jupiter.CircleBody.setPosition((jupiter.px * (SCALE)).convert_to<float>(), (jupiter.py * (SCALE)).convert_to<float>());
+		jupiter.CircleBody.move(width / 2, height / 2);
+		
+		saturn.CircleBody.setPosition((saturn.px * (SCALE)).convert_to<float>(), (saturn.py * (SCALE)).convert_to<float>());
+		saturn.CircleBody.move(width / 2, height / 2);
 
-		window.clear(sf::Color(110, 87, 115, 255));
+
+		window.clear();//sf::Color(110, 87, 115, 255));
 		window.setView(view);
 
 		window.draw(sun.CircleBody);
 		window.draw(earth.CircleBody);
 		window.draw(venus.CircleBody);
+		window.draw(mercury.CircleBody);
 		window.draw(mars.CircleBody);
+		window.draw(jupiter.CircleBody);
+		window.draw(saturn.CircleBody);
 
 		window.display();
 
