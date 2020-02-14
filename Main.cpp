@@ -5,19 +5,18 @@
 #include <string>
 #include <iostream>
 
-
 using namespace boost::multiprecision;
 
 constexpr auto width = 1920;
 constexpr auto height = 1080;
 
-cpp_dec_float_50 
+cpp_dec_float_50
 	gConst = 6.67 * pow(10, -11),
 	AU = (149.6e6 * 1000),
 	SCALE = 250 / AU;
 
-
-class Body {
+class Body
+{
 
 public:
 	float radius = 0.0;
@@ -62,7 +61,7 @@ std::vector<Body> vecBodys;
 
 void addBody(Body b);
 cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2, long long int distance);
-void resizeView(const sf::RenderWindow& window, sf::View& view);
+void resizeView(const sf::RenderWindow &window, sf::View &view);
 
 int main()
 {
@@ -73,13 +72,12 @@ int main()
 
 	sf::Event event;
 
-
 	Body sun("Sun", 1.989 * pow(10, 30), 0.0, 0.0, 40, 234, 144, 133);
 	addBody(sun);
 
 	Body earth("Earth", 5.972 * pow(10, 24), -1 * AU, 29.783 * 1000, 5, 233, 226, 208);
 	addBody(earth);
-	
+
 	Body venus("Venus", 4.867 * pow(10, 24), 0.723 * AU, 35.02 * 1000, 5, 212, 93, 121);
 	addBody(venus);
 
@@ -91,7 +89,7 @@ int main()
 
 	Body jupiter("Jupiter", 1.898 * pow(10, 27), 5.2 * AU, -13.1 * 1000, 15, 195, 93, 121);
 	addBody(jupiter);
-	
+
 	Body saturn("Saturn", 5.683 * pow(10, 26), 9.6 * AU, -9.68 * 1000, 15, 195, 93, 121);
 	addBody(saturn);
 
@@ -100,49 +98,49 @@ int main()
 		int timestep = 24 * 3600;
 		while (window.pollEvent(event))
 		{
-			switch(event.type)
-			{ 
-				case sf::Event::Closed:
-					window.close();
-					break;
-			
-				case sf::Event::MouseWheelScrolled:
-				{
-					if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				window.close();
+				break;
 
-						std::cout << event.mouseWheelScroll.delta << std::endl;
-						if (event.mouseWheelScroll.delta > 0)
-						{
-							view.zoom(0.9f);
-						}
-						else if (event.mouseWheelScroll.delta < 0)
-						{
-							view.zoom(1.1f);
-						}
+			case sf::Event::MouseWheelScrolled:
+			{
+				if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+				{
+
+					std::cout << event.mouseWheelScroll.delta << std::endl;
+					if (event.mouseWheelScroll.delta > 0)
+					{
+						view.zoom(0.9f);
+					}
+					else if (event.mouseWheelScroll.delta < 0)
+					{
+						view.zoom(1.1f);
 					}
 				}
+			}
 				//case sf::Event::Resized:
-					//resizeView(window, view);
-					//break;
+				//resizeView(window, view);
+				//break;
 			}
 		}
 
-		
-		window.clear();//sf::Color(110, 87, 115, 255));
+		window.clear(); //sf::Color(110, 87, 115, 255));
 		window.setView(view);
 
-		for (auto& body : vecBodys)
+		for (auto &body : vecBodys)
 		{
 			body.total_fx = 0.0;
 			body.total_fy = 0.0;
-			for (auto& target : vecBodys)
+			for (auto &target : vecBodys)
 			{
 				if (body.id != target.id)
 				{
-	
-					long long int fDistance = sqrt(((body.px - target.px)*(body.px - target.px)) + ((body.py - target.py) * (body.py - target.py))).convert_to<long long int>();
+
+					long long int fDistance = sqrt(((body.px - target.px) * (body.px - target.px)) + ((body.py - target.py) * (body.py - target.py))).convert_to<long long int>();
 					cpp_dec_float_50 force = findGravitationalForce(body.mass, target.mass, fDistance);
-					
+
 					cpp_dec_float_50 theta = atan2(target.py - body.py, target.px - body.px);
 					cpp_dec_float_50 fx = cos(theta) * force;
 					cpp_dec_float_50 fy = sin(theta) * force;
@@ -166,15 +164,13 @@ int main()
 		}
 
 		window.display();
-
-		
 	}
 	return 0;
 }
 
-
 //adds class pointers to vector array
-void addBody(Body b) {
+void addBody(Body b)
+{
 
 	b.id = vecBodys.size();
 	vecBodys.emplace_back(b);
@@ -183,10 +179,10 @@ void addBody(Body b) {
 cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2, long long int distance)
 {
 	cpp_dec_float_50 force;
-	return  force = gConst * ((m1 * m2) / (pow(distance, 2)));
+	return force = gConst * ((m1 * m2) / (pow(distance, 2)));
 }
 
-void resizeView(const sf::RenderWindow& window, sf::View& view)
+void resizeView(const sf::RenderWindow &window, sf::View &view)
 {
 	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
 	view.setSize(height * aspectRatio, height);
