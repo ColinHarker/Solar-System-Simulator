@@ -11,34 +11,41 @@ using namespace boost::multiprecision;
 constexpr auto width = 1920;
 constexpr auto height = 1080;
 
-
-cpp_dec_float_50 gConst = 6.67 * pow(10, -11);
-cpp_dec_float_50 AU = (149.6e6 * 1000);
-cpp_dec_float_50 SCALE = 250 / AU;
-
-
+cpp_dec_float_50 
+	gConst = 6.67 * pow(10, -11),
+	AU = (149.6e6 * 1000),
+	SCALE = 250 / AU;
 
 
 class Body {
 
 public:
-
-	cpp_dec_float_50 mass = 0.0;
 	float radius = 0.0;
-	cpp_dec_float_50 vx = 0.0;
-	cpp_dec_float_50 vy = 0.0;
-	cpp_dec_float_50 px = 0.0;
-	cpp_dec_float_50 py = 0.0;
-	cpp_dec_float_50 total_fx = 0.0;
-	cpp_dec_float_50 total_fy = 0.0;
+	cpp_dec_float_50
+		mass = 0.0,
+		vx = 0.0,
+		vy = 0.0,
+		px = 0.0,
+		py = 0.0,
+		total_fx = 0.0,
+		total_fy = 0.0;
 	int id = 0;
-
+	std::vector<Body> vecBodys;
 	std::string name;
 
 	sf::CircleShape CircleBody;
 
+	Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float _radius, int R, int G, int B)
+	{
+		name = n;
+		mass = m;
+		px = position;
+		vy = velocity;
+		setup_appearance(_radius, R, G, B);
+	}
+
 	void setup_appearance(
-		int newRadius,
+		float newRadius,
 		sf::Uint8 R,
 		sf::Uint8 G,
 		sf::Uint8 B)
@@ -51,9 +58,9 @@ public:
 	};
 };
 
-std::vector<Body*> vecBodys;
+std::vector<Body> vecBodys;
 
-void addBody(Body* b);
+void addBody(Body b);
 cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2, long long int distance);
 void resizeView(const sf::RenderWindow& window, sf::View& view);
 
@@ -64,51 +71,29 @@ int main()
 	window.setFramerateLimit(60);
 	sf::View view(sf::Vector2f(width / 2.0f, height / 2.0f), sf::Vector2f(width, height));
 
-
-	Body* pEarth = nullptr;
-	Body* pSun = nullptr;
-	Body* pVenus = nullptr;
-	Body* pMars = nullptr;
-
-
 	sf::Event event;
 
-	Body sun;
-	sun.name = "Sun";
-	sun.mass = 1.989 * pow(10, 30);
-	sun.setup_appearance(40, 234, 144, 133);
-	pSun = &sun;
-	addBody(pSun);
 
-	Body earth;
-	earth.name = "Earth";
-	earth.mass = 5.972 * pow(10, 24);
-	earth.px = -1 * AU;
-	earth.vy = 29.783 * 1000; //km/s
-	earth.setup_appearance(5, 233, 226, 208);
-	pEarth = &earth;
-	addBody(pEarth);
+	Body sun("Sun", 1.989 * pow(10, 30), 0.0, 0.0, 40, 234, 144, 133);
+	addBody(sun);
 
+	Body earth("Earth", 5.972 * pow(10, 24), -1 * AU, 29.783 * 1000, 5, 233, 226, 208);
+	addBody(earth);
 	
-	Body venus;
-	venus.name = "Venus";
-	venus.mass = 4.867 * pow(10, 24);
-	venus.px = 0.723 * AU;
-	venus.vy = -35.02 * 1000;
-	venus.setup_appearance(5, 212, 93, 121);
-	pVenus = &venus;
-	addBody(pVenus);
+	Body venus("Venus", 4.867 * pow(10, 24), 0.723 * AU, 35.02 * 1000, 5, 212, 93, 121);
+	addBody(venus);
 
-	Body mars;
-	mars.name = "Mars";
-	mars.mass = 6.39 * pow(10, 23);
-	mars.px = 1.524 * AU;
-	mars.vy = -24.07 * 1000;
-	mars.setup_appearance(5, 195, 93, 121);
-	pMars = &mars;
-	addBody(pMars);
+	Body mercury("Mercury", 3.285 * pow(10, 23), 0.4 * AU, -48 * 1000, 5, 212, 93, 121);
+	addBody(mercury);
+
+	Body mars("Mars", 6.39 * pow(10, 23), 1.524 * AU, -24.07 * 1000, 5, 195, 93, 121);
+	addBody(mars);
+
+	Body jupiter("Jupiter", 1.898 * pow(10, 27), 5.2 * AU, -13.1 * 1000, 15, 195, 93, 121);
+	addBody(jupiter);
 	
-
+	Body saturn("Saturn", 5.683 * pow(10, 26), 9.6 * AU, -9.68 * 1000, 15, 195, 93, 121);
+	addBody(saturn);
 
 	while (window.isOpen())
 	{
@@ -128,11 +113,11 @@ int main()
 						std::cout << event.mouseWheelScroll.delta << std::endl;
 						if (event.mouseWheelScroll.delta > 0)
 						{
-							view.zoom(0.5f);
+							view.zoom(0.9f);
 						}
 						else if (event.mouseWheelScroll.delta < 0)
 						{
-							view.zoom(1.5f);
+							view.zoom(1.1f);
 						}
 					}
 				}
@@ -143,56 +128,42 @@ int main()
 		}
 
 		
-
+		window.clear();//sf::Color(110, 87, 115, 255));
+		window.setView(view);
 
 		for (auto& body : vecBodys)
 		{
-			body->total_fx = 0.0;
-			body->total_fy = 0.0;
+			body.total_fx = 0.0;
+			body.total_fy = 0.0;
 			for (auto& target : vecBodys)
 			{
-				if (body->id != target->id)
+				if (body.id != target.id)
 				{
 	
-					long long int fDistance = sqrt(((body->px - target->px)*(body->px - target->px)) + ((body->py - target->py) * (body->py - target->py))).convert_to<long long int>();
-					cpp_dec_float_50 force = findGravitationalForce(body->mass, target->mass, fDistance);
+					long long int fDistance = sqrt(((body.px - target.px)*(body.px - target.px)) + ((body.py - target.py) * (body.py - target.py))).convert_to<long long int>();
+					cpp_dec_float_50 force = findGravitationalForce(body.mass, target.mass, fDistance);
 					
-					cpp_dec_float_50 theta = atan2(target->py - body->py, target->px - body->px);
+					cpp_dec_float_50 theta = atan2(target.py - body.py, target.px - body.px);
 					cpp_dec_float_50 fx = cos(theta) * force;
 					cpp_dec_float_50 fy = sin(theta) * force;
 
-					body->total_fx += fx;
-					body->total_fy += fy;
+					body.total_fx += fx;
+					body.total_fy += fy;
 				}
 			}
+			body.vx += body.total_fx / body.mass * timestep;
+			body.vy += body.total_fy / body.mass * timestep;
+
+			double vx = body.vx.convert_to<double>();
+			double vy = body.vy.convert_to<double>();
+
+			body.px += vx * timestep;
+			body.py += vy * timestep;
+
+			body.CircleBody.setPosition((body.px * (SCALE)).convert_to<float>(), (body.py * (SCALE)).convert_to<float>());
+			body.CircleBody.move(width / 2, height / 2);
+			window.draw(body.CircleBody);
 		}
-		for (auto& body : vecBodys)
-		{
-			body->vx += body->total_fx / body->mass * timestep;
-			body->vy += body->total_fy / body->mass * timestep;
-
-			double vx = body->vx.convert_to<double>();
-			double vy = body->vy.convert_to<double>();
-
-			body->px += vx * timestep;
-			body->py += vy * timestep;
-		}
-		//std::cout << (sun.px * (SCALE)).convert_to<float>() << std::endl;
-		sun.CircleBody.setPosition(width / 2, height / 2);
-		earth.CircleBody.setPosition((earth.px * (SCALE)).convert_to<float>(), (earth.py * (SCALE)).convert_to<float>());
-		earth.CircleBody.move(width / 2, height / 2);
-		venus.CircleBody.setPosition((venus.px * (SCALE)).convert_to<float>(), (venus.py * (SCALE)).convert_to<float>());
-		venus.CircleBody.move(width / 2, height / 2);
-		mars.CircleBody.setPosition((mars.px * (SCALE)).convert_to<float>(), (mars.py * (SCALE)).convert_to<float>());
-		mars.CircleBody.move(width / 2, height / 2);
-
-		window.clear(sf::Color(110, 87, 115, 255));
-		window.setView(view);
-
-		window.draw(sun.CircleBody);
-		window.draw(earth.CircleBody);
-		window.draw(venus.CircleBody);
-		window.draw(mars.CircleBody);
 
 		window.display();
 
@@ -203,9 +174,9 @@ int main()
 
 
 //adds class pointers to vector array
-void addBody(Body* b) {
+void addBody(Body b) {
 
-	b->id = vecBodys.size();
+	b.id = vecBodys.size();
 	vecBodys.emplace_back(b);
 }
 
