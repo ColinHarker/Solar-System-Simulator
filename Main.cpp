@@ -1,67 +1,24 @@
-#include <SFML/Graphics.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <cmath>
 #include <math.h>
 #include <string>
 #include <iostream>
 
-using namespace boost::multiprecision;
+#include "Body.h"
 
 constexpr auto width = 1920;
 constexpr auto height = 1080;
 
 cpp_dec_float_50
-	gConst = 6.67 * pow(10, -11),
-	AU = (149.6e6 * 1000),
-	SCALE = 250 / AU;
+gConst = 6.67 * pow(10, -11),
+AU = (149.6e6 * 1000),
+SCALE = 250 / AU;
 
-class Body
-{
-
-public:
-	float radius = 0.0;
-	cpp_dec_float_50
-		mass = 0.0,
-		vx = 0.0,
-		vy = 0.0,
-		px = 0.0,
-		py = 0.0,
-		total_fx = 0.0,
-		total_fy = 0.0;
-	int id = 0;
-	std::vector<Body> vecBodys;
-	std::string name;
-
-	sf::CircleShape CircleBody;
-
-	Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float _radius, int R, int G, int B)
-	{
-		name = n;
-		mass = m;
-		px = position;
-		vy = velocity;
-		setup_appearance(_radius, R, G, B);
-	}
-
-	void setup_appearance(
-		float newRadius,
-		sf::Uint8 R,
-		sf::Uint8 G,
-		sf::Uint8 B)
-	{
-		CircleBody.setRadius(newRadius);
-		CircleBody.setOrigin(newRadius, newRadius);
-		CircleBody.setFillColor(sf::Color::Color(R, G, B, 255));
-
-		radius = newRadius;
-	};
-};
 
 std::vector<Body> vecBodys;
 
 void addBody(Body b);
 cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2, long long int distance);
-void resizeView(const sf::RenderWindow &window, sf::View &view);
+void resizeView(const sf::RenderWindow& window, sf::View& view);
 
 int main()
 {
@@ -120,20 +77,20 @@ int main()
 					}
 				}
 			}
-				//case sf::Event::Resized:
-				//resizeView(window, view);
-				//break;
+			//case sf::Event::Resized:
+			//resizeView(window, view);
+			//break;
 			}
 		}
 
 		window.clear(); //sf::Color(110, 87, 115, 255));
 		window.setView(view);
 
-		for (auto &body : vecBodys)
+		for (auto& body : vecBodys)
 		{
 			body.total_fx = 0.0;
 			body.total_fy = 0.0;
-			for (auto &target : vecBodys)
+			for (auto& target : vecBodys)
 			{
 				if (body.id != target.id)
 				{
@@ -182,7 +139,7 @@ cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2
 	return force = gConst * ((m1 * m2) / (pow(distance, 2)));
 }
 
-void resizeView(const sf::RenderWindow &window, sf::View &view)
+void resizeView(const sf::RenderWindow& window, sf::View& view)
 {
 	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
 	view.setSize(height * aspectRatio, height);
