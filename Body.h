@@ -1,15 +1,13 @@
 #ifndef Body_H
 #define Body_H
 
-#include <boost/multiprecision/cpp_dec_float.hpp>
-#include <SFML/Graphics.hpp>
+#include "linker.h"
 
 using namespace boost::multiprecision;
 
-class Body
+struct Body
 {
 
-public:
 	float radius = 0.0;
 	cpp_dec_float_50
 		mass = 0.0,
@@ -24,6 +22,7 @@ public:
 
 	sf::CircleShape CircleBody;
 
+	Body() {};
 	Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float _radius, int R, int G, int B);
 	void setup_appearance(
 		float newRadius,

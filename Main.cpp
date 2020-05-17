@@ -1,23 +1,11 @@
-#include <cmath>
-#include <math.h>
-#include <string>
-#include <iostream>
 
-#include "Body.h"
-
-constexpr auto width = 1920;
-constexpr auto height = 1080;
-
-cpp_dec_float_50
-gConst = 6.67 * pow(10, -11),
-AU = (149.6e6 * 1000),
-SCALE = 250 / AU;
+#include "linker.h"
 
 
-std::vector<Body> vecBodys;
 
-void addBody(Body b);
-cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2, long long int distance);
+
+std::vector<Body> addBodies(std::string file_name);
+cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50& m1, cpp_dec_float_50& m2, long long int& distance);
 void resizeView(const sf::RenderWindow& window, sf::View& view);
 
 int main()
@@ -29,26 +17,7 @@ int main()
 
 	sf::Event event;
 
-	Body sun("Sun", 1.989 * pow(10, 30), 0.0, 0.0, 40, 234, 144, 133);
-	addBody(sun);
-
-	Body earth("Earth", 5.972 * pow(10, 24), -1 * AU, 29.783 * 1000, 5, 233, 226, 208);
-	addBody(earth);
-
-	Body venus("Venus", 4.867 * pow(10, 24), 0.723 * AU, 35.02 * 1000, 5, 212, 93, 121);
-	addBody(venus);
-
-	Body mercury("Mercury", 3.285 * pow(10, 23), 0.4 * AU, -48 * 1000, 5, 212, 93, 121);
-	addBody(mercury);
-
-	Body mars("Mars", 6.39 * pow(10, 23), 1.524 * AU, -24.07 * 1000, 5, 195, 93, 121);
-	addBody(mars);
-
-	Body jupiter("Jupiter", 1.898 * pow(10, 27), 5.2 * AU, -13.1 * 1000, 15, 195, 93, 121);
-	addBody(jupiter);
-
-	Body saturn("Saturn", 5.683 * pow(10, 26), 9.6 * AU, -9.68 * 1000, 15, 195, 93, 121);
-	addBody(saturn);
+	std::vector<Body> vecBodys = addBodies(kFile_Name);
 
 	while (window.isOpen())
 	{
@@ -123,20 +92,6 @@ int main()
 		window.display();
 	}
 	return 0;
-}
-
-//adds class pointers to vector array
-void addBody(Body b)
-{
-
-	b.id = vecBodys.size();
-	vecBodys.emplace_back(b);
-}
-
-cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50 m1, cpp_dec_float_50 m2, long long int distance)
-{
-	cpp_dec_float_50 force;
-	return force = gConst * ((m1 * m2) / (pow(distance, 2)));
 }
 
 void resizeView(const sf::RenderWindow& window, sf::View& view)
