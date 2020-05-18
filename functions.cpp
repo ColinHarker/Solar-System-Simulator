@@ -18,7 +18,7 @@ std::vector<Body> addBodies(std::string file_name) {
 		getline(ifs, b, '\n');
 
 		std::cout << name << mass << position << velocity << radius << r << g << b << std::endl;
-		Body temp(name, static_cast<cpp_dec_float_50>(mass), static_cast<cpp_dec_float_50>(position)* AU, static_cast<cpp_dec_float_50>(velocity) * 1000, std::stof(radius), std::stoi(r), std::stoi(g), std::stoi(b));
+		Body temp(name, static_cast<cpp_dec_float_50>(mass), static_cast<cpp_dec_float_50>(position)* constant::AU, static_cast<cpp_dec_float_50>(velocity) * 1000, std::stof(radius), std::stoi(r), std::stoi(g), std::stoi(b));
 		temp.id = temp_list.size();
 		temp_list.push_back(temp);
 	}
@@ -28,11 +28,11 @@ std::vector<Body> addBodies(std::string file_name) {
 cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50& m1, cpp_dec_float_50& m2, long long int& distance)
 {
 	cpp_dec_float_50 force;
-	return force = gConst * ((m1 * m2) / (pow(distance, 2)));
+	return force = constant::gConst * ((m1 * m2) / (pow(distance, 2)));
 }
 
 void resizeView(const sf::RenderWindow& window, sf::View& view)
 {
 	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
-	view.setSize(height * aspectRatio, height);
+	view.setSize(constant::height * aspectRatio, constant::height);
 }

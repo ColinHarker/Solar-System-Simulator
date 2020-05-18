@@ -1,15 +1,16 @@
 #include "linker.h"
+#include "functions.h"
 
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(width, height), "Title");
+	sf::RenderWindow window(sf::VideoMode(constant::width, constant::height), "Title");
 	window.setFramerateLimit(60);
-	sf::View view(sf::Vector2f(width / 2.0f, height / 2.0f), sf::Vector2f(width, height));
+	sf::View view(sf::Vector2f(constant::width / 2.0f, constant::height / 2.0f), sf::Vector2f(constant::width, constant::height));
 
 	sf::Event event;
 
-	std::vector<Body> vecBodys = addBodies(kFile_Name);
+	std::vector<Body> vecBodys = addBodies(constant::kFile_Name);
 
 	while (window.isOpen())
 	{
@@ -76,8 +77,8 @@ int main()
 			body.px += vx * timestep;
 			body.py += vy * timestep;
 
-			body.CircleBody.setPosition((body.px * (SCALE)).convert_to<float>(), (body.py * (SCALE)).convert_to<float>());
-			body.CircleBody.move(width / 2, height / 2);
+			body.CircleBody.setPosition((body.px * (constant::SCALE)).convert_to<float>(), (body.py * (constant::SCALE)).convert_to<float>());
+			body.CircleBody.move(constant::width / 2, constant::height / 2);
 			window.draw(body.CircleBody);
 		}
 
