@@ -5,8 +5,8 @@
 
 namespace constant {
 
-	constexpr auto width = 1920;
-	constexpr auto height = 1080;
+	constexpr auto kWidth = 1920;
+	constexpr auto kHeight = 1080;
 
 	const std::string kFile_Name = "bodies.csv";
 

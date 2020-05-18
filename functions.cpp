@@ -34,5 +34,5 @@ cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50& m1, cpp_dec_float_50& 
 void resizeView(const sf::RenderWindow& window, sf::View& view)
 {
 	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
-	view.setSize(constant::height * aspectRatio, constant::height);
+	view.setSize(constant::kHeight * aspectRatio, constant::kHeight);
 }

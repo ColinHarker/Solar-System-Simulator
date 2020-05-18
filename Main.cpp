@@ -4,9 +4,9 @@
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(constant::width, constant::height), "Title");
+	sf::RenderWindow window(sf::VideoMode(constant::kWidth, constant::kHeight), "Title");
 	window.setFramerateLimit(60);
-	sf::View view(sf::Vector2f(constant::width / 2.0f, constant::height / 2.0f), sf::Vector2f(constant::width, constant::height));
+	sf::View view(sf::Vector2f(constant::kWidth / 2.0f, constant::kHeight / 2.0f), sf::Vector2f(constant::kWidth, constant::kHeight));
 
 	sf::Event event;
 
@@ -78,7 +78,7 @@ int main()
 			body.py += vy * timestep;
 
 			body.CircleBody.setPosition((body.px * (constant::SCALE)).convert_to<float>(), (body.py * (constant::SCALE)).convert_to<float>());
-			body.CircleBody.move(constant::width / 2, constant::height / 2);
+			body.CircleBody.move(constant::kWidth / 2, constant::kHeight / 2);
 			window.draw(body.CircleBody);
 		}
 
