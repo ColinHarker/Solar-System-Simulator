@@ -1,6 +1,4 @@
-#ifndef LINKER_H
-#define LINKER_H
-
+#pragma once
 
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <SFML/Graphics.hpp>
@@ -22,5 +20,3 @@ gConst = 6.67 * pow(10, -11),
 AU = (149.6e6 * 1000),
 SCALE = 250 / AU;
 
-
-#endif // !LINKER_H

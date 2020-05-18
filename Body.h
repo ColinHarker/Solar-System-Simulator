@@ -1,5 +1,4 @@
-#ifndef Body_H
-#define Body_H
+#pragma once 
 
 #include "linker.h"
 
@@ -32,4 +31,3 @@ struct Body
 };
 
 
-#endif // !Body_H
