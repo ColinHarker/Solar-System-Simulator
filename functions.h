@@ -1,9 +1,10 @@
-#pragma once
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #include "linker.h"
 #include "Body.h"
 
-inline std::vector<Body> addBodies(std::string file_name) {
+std::vector<Body> addBodies(std::string file_name) {
 	std::vector<Body> temp_list;
 
 	std::ifstream ifs;
@@ -28,13 +29,15 @@ inline std::vector<Body> addBodies(std::string file_name) {
 	return temp_list;
 }
 
-[[nodiscard]] inline cpp_dec_float_50 findGravitationalForce(cpp_dec_float_50& m1, cpp_dec_float_50& m2, long long int& distance)
+[[nodiscard]] cpp_dec_float_50 findGravitationalForce(const cpp_dec_float_50& m1, const cpp_dec_float_50& m2, const cpp_dec_float_50& distance)
 {
 	return constant::gConst * ((m1 * m2) / (pow(distance, 2)));
 }
 
-inline void resizeView(const sf::RenderWindow& window, sf::View& view)
+void resizeView(const sf::RenderWindow& window, sf::View& view)
 {
 	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
 	view.setSize(constant::kHeight * aspectRatio, constant::kHeight);
 }
+
+#endif // !FUNCTIONS_H

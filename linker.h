@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LINKER_H
+#define LINKER_H
 
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <SFML/Graphics.hpp>
@@ -11,3 +12,4 @@
 
 
 
+#endif // !LINKER_H

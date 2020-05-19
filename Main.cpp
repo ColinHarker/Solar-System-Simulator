@@ -50,15 +50,15 @@ int main()
 
 		for (auto& body : vecBodys)
 		{
-			body.total_fx = 0.0;
-			body.total_fy = 0.0;
+			body.total_fx = (cpp_dec_float_50)0.0;
+			body.total_fy = (cpp_dec_float_50)0.0;
 			for (auto& target : vecBodys)
 			{
 				if (body.id != target.id)
 				{
 
-					long long int fDistance = sqrt(((body.px - target.px) * (body.px - target.px)) + ((body.py - target.py) * (body.py - target.py))).convert_to<long long int>();
-					cpp_dec_float_50 force = findGravitationalForce(body.mass, target.mass, fDistance);
+					long long int fDistance = static_cast<long long int>(sqrt(((body.px - target.px) * (body.px - target.px)) + ((body.py - target.py) * (body.py - target.py))));
+					cpp_dec_float_50 force = findGravitationalForce(body.mass, target.mass, static_cast<cpp_dec_float_50>(fDistance));
 
 					cpp_dec_float_50 theta = atan2(target.py - body.py, target.px - body.px);
 					cpp_dec_float_50 fx = cos(theta) * force;
@@ -68,17 +68,17 @@ int main()
 					body.total_fy += fy;
 				}
 			}
-			body.vx += body.total_fx / body.mass * timestep;
-			body.vy += body.total_fy / body.mass * timestep;
+			body.vx += body.total_fx / body.mass * static_cast<cpp_dec_float_50>(timestep);
+			body.vy += body.total_fy / body.mass * static_cast<cpp_dec_float_50>(timestep);
 
-			double vx = body.vx.convert_to<double>();
-			double vy = body.vy.convert_to<double>();
+			double vx = static_cast<double>(body.vx);
+			double vy = static_cast<double>(body.vy);
 
-			body.px += vx * timestep;
-			body.py += vy * timestep;
+			body.px += static_cast<cpp_dec_float_50>(vx) * static_cast<cpp_dec_float_50>(timestep);
+			body.py += static_cast<cpp_dec_float_50>(vy)* static_cast<cpp_dec_float_50>(timestep);
 
-			body.CircleBody.setPosition((body.px * (constant::SCALE)).convert_to<float>(), (body.py * (constant::SCALE)).convert_to<float>());
-			body.CircleBody.move(constant::kWidth / 2, constant::kHeight / 2);
+			body.CircleBody.setPosition(static_cast<float>(body.px * (constant::SCALE)), static_cast<float>(body.py * (constant::SCALE)));
+			body.CircleBody.move(static_cast<float>(constant::kWidth / 2), static_cast<float>(constant::kHeight / 2));
 			window.draw(body.CircleBody);
 		}
 

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #include "boost/multiprecision/cpp_dec_float.hpp"
 #include <string>
@@ -15,3 +16,5 @@ namespace constant {
 		AU = (149.6e6 * 1000),
 		SCALE = 250 / AU;
 }
+
+#endif // !CONSTANTS_H

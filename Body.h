@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BODY_H
+#define BODY_H
+
 
 #include "linker.h"
 
@@ -22,7 +24,7 @@ struct Body
 
 	Body() = default;
 
-	inline Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float radius, int R, int G, int B) {
+	Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float radius, int R, int G, int B) {
 		name = n;
 		mass = m;
 		px = position;
@@ -30,7 +32,7 @@ struct Body
 		setup_appearance(radius, R, G, B);
 	}
 
-	inline void setup_appearance(
+	void setup_appearance(
 		float newRadius,
 		sf::Uint8 R,
 		sf::Uint8 G,
@@ -42,3 +44,5 @@ struct Body
 		radius = newRadius;
 	};
 };
+
+#endif // !BODY_H
