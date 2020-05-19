@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "linker.h"
 
@@ -6,7 +6,6 @@ using namespace boost::multiprecision;
 
 struct Body
 {
-
 	float radius = 0.0;
 	cpp_dec_float_50
 		mass = 0.0,
@@ -21,13 +20,25 @@ struct Body
 
 	sf::CircleShape CircleBody;
 
-	Body() {};
-	Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float _radius, int R, int G, int B);
-	void setup_appearance(
+	Body() = default;
+
+	inline Body(std::string n, cpp_dec_float_50 m, cpp_dec_float_50 position, cpp_dec_float_50 velocity, float radius, int R, int G, int B) {
+		name = n;
+		mass = m;
+		px = position;
+		vy = velocity;
+		setup_appearance(radius, R, G, B);
+	}
+
+	inline void setup_appearance(
 		float newRadius,
 		sf::Uint8 R,
 		sf::Uint8 G,
-		sf::Uint8 B);
+		sf::Uint8 B) {
+		CircleBody.setRadius(newRadius);
+		CircleBody.setOrigin(newRadius, newRadius);
+		CircleBody.setFillColor(sf::Color::Color(R, G, B, 255));
+
+		radius = newRadius;
+	};
 };
-
-
